@@ -1,0 +1,27 @@
+resource app_signature "application/x-vnd.WestenraSoftworks-Akari";
+
+resource app_version {
+	major      = 0,
+	middle     = 1,
+	minor      = 0,
+	variety    = B_APPV_BETA,
+	internal   = 0,
+	short_info = "Akari",
+	long_info  = "Akari 0.1 © 2026 Westenra Softworks"
+};
+
+resource app_flags B_SINGLE_LAUNCH | B_BACKGROUND_APP;
+
+resource file_types message {
+	"types" = "application/x-vnd.WestenraSoftworks-Akari"
+};
+
+resource vector_icon {
+	$"6669636E0401F5B85EFF01FFE9B0FF019A622EFF014A321EFF0C0A024022402C"
+	$"0A04C074B6E4BF0BB6E4BF0BB57BC074B57B0A02BF275AC0595A0A023F5ABF8D"
+	$"5E0A02415ABFF35E0A02405A405F0A04C321B96CBC5EB96CBC5EB7BBC321B7BB"
+	$"0A04C321C95CBC5EC95CBC5EC7ABC321C7AB0A08C602C464C257C8B4BD28C8B4"
+	$"B97DC464B97DBE4BBD28B9FBC257B9FBC602BE4B0A02303A503A0A0230445044"
+	$"0A02304E504E040A000108000A0103090A0B000A02050001020304000A030305"
+	$"060700"
+};
