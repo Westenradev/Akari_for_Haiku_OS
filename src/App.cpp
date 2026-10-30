@@ -23,10 +23,7 @@ App::App()
 	fSettings.Load();
 	fController = new TintController();
 	fController->Init();
-	AppSettings data = fSettings.fData;
-	fController->SetWarmth(data.warmthSlider);
-	fController->SetEnabled(data.enabled);
-	fController->SetSchedule(data.schedule);
+	fController->LoadSettings(fSettings.fData);
 }
 
 
@@ -49,10 +46,11 @@ void
 App::MessageReceived(BMessage* message)
 {
 	switch (message->what) {
-		case kMsgReplicantToggle:
+			case kMsgReplicantToggle:
 		{
 			bool enabled = fController->Settings().enabled;
 			fController->SetEnabled(!enabled);
+			fController->SaveSettings();
 			if (fWindow != NULL)
 				fWindow->PostMessage(kMsgTick);
 			NotifyReplicant();
@@ -63,6 +61,7 @@ App::MessageReceived(BMessage* message)
 			break;
 	}
 }
+
 
 
 bool

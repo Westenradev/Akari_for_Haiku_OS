@@ -16,6 +16,7 @@
 #include "App.h"
 #include "TintController.h"
 #include "core/ColorMath.h"
+#include "core/Schedule.h"
 
 namespace akari {
 
@@ -144,38 +145,46 @@ AkariWindow::MessageReceived(BMessage* message)
 		{
 			int32_t value = fWarmthSlider->Value();
 			fController->SetWarmth(value);
+			fController->SaveSettings();
 			UpdateStatus();
 			break;
 		}
 		case kMsgEnabledChanged:
 		{
 			fController->SetEnabled(fEnabledBox->Value() == B_CONTROL_ON);
+			fController->SaveSettings();
+			static_cast<App*>(be_app)->NotifyReplicant();
 			UpdateStatus();
 			break;
 		}
 		case kMsgScheduleEnabledChanged:
 		{
 			PushSchedule();
-			fController->SetSchedule(fController->Settings().schedule);
+			fController->SaveSettings();
 			UpdateStatus();
 			break;
 		}
 		case kMsgScheduleTimeChanged:
 		{
 			PushSchedule();
-			fController->SetSchedule(fController->Settings().schedule);
+			fController->SaveSettings();
 			UpdateStatus();
 			break;
 		}
 		case kMsgOverrideChanged:
 		{
 			fController->SetOverride(fOverrideBox->Value() == B_CONTROL_ON);
+			fController->SaveSettings();
+			static_cast<App*>(be_app)->NotifyReplicant();
 			UpdateStatus();
 			break;
 		}
 		case kMsgTick:
 		{
+			bool wasActive = fController->IsTintActive();
 			fController->Tick();
+			if (fController->IsTintActive() != wasActive)
+				static_cast<App*>(be_app)->NotifyReplicant();
 			UpdateStatus();
 			break;
 		}

@@ -65,6 +65,25 @@ OverlayWindow::OverlayWindow()
 }
 
 
+void
+OverlayWindow::ScreenChanged(BRect screenSize, color_space depth)
+{
+	BWindow::ScreenChanged(screenSize, depth);
+	ResizeToScreen();
+}
+
+
+void
+OverlayWindow::ResizeToScreen()
+{
+	BRect frame = BScreen().Frame();
+	if (Frame() != frame) {
+		MoveTo(frame.LeftTop());
+		ResizeTo(frame.Width(), frame.Height());
+	}
+}
+
+
 OverlayWindow::~OverlayWindow()
 {
 }

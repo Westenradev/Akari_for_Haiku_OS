@@ -24,6 +24,8 @@ public:
 
 private:
 	void				AddReplicant();
+
+public:
 	void				NotifyReplicant();
 
 	Settings			fSettings;

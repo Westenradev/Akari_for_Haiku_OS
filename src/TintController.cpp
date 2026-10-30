@@ -48,6 +48,14 @@ TintController::Init()
 
 
 void
+TintController::LoadSettings(const AppSettings& settings)
+{
+	fSettings = settings;
+	Apply();
+}
+
+
+void
 TintController::SetWarmth(int32_t slider)
 {
 	fSettings.warmthSlider = slider;
@@ -180,15 +188,20 @@ TintController::Apply()
 	bool active = ComputeActive();
 	fActive = active;
 
-	if (!active || fMethod != kMethodOverlay || fOverlay == NULL) {
-		if (fOverlay != NULL)
-			fOverlay->HideTint();
+	if (fOverlay == NULL)
+		return;
+	if (!active || fMethod != kMethodOverlay) {
+		fOverlay->HideTint();
 		return;
 	}
 
 	int32_t kelvin = Kelvin();
 	Rgb rgb = KelvinToRgb(kelvin);
 	uint8_t alpha = WarmthToAlpha(kelvin);
+	if (alpha == kMinOverlayAlpha) {
+		fOverlay->HideTint();
+		return;
+	}
 	rgb_color color;
 	color.red = rgb.red;
 	color.green = rgb.green;

@@ -2,7 +2,7 @@
 
 Living checklist for a QC pass. Update after every milestone.
 
-## Status: M0 skeleton complete
+## Status: M0 skeleton complete, M1 (live tint + persistence) implemented, awaiting Haiku test report
 
 ### What is done (M0)
 
@@ -34,6 +34,16 @@ Living checklist for a QC pass. Update after every milestone.
   and current haiku/haiku headers (Window.h, View.h, Screen.h, Slider.h, Menu.h, Archivable.h,
   Deskbar.h, MessageRunner.h, rc parser/lexer, FlatIconImporter/FlatIconFormat).
 
+### M1 changes since M0
+
+- `TintController::LoadSettings()` now applies the *full* loaded settings (override, frame,
+  method) at startup instead of only warmth/enabled/schedule.
+- Overlay hides when warmth is at max (alpha 0) so it never needlessly covers the screen.
+- Overlay window follows screen size changes (`ScreenChanged` → `ResizeToScreen`).
+- Every UI change (slider, checkboxes, times, override, replicant toggle) now persists
+  immediately via `TintController::SaveSettings()`; window frame is saved on quit/move.
+- Replicant icon state is pushed from the app on every state change (`NotifyReplicant`).
+
 ### What to test on Haiku (M0 acceptance)
 
 ```sh
@@ -49,7 +59,16 @@ cmake -B build -G Ninja && ninja -C build && ./build/Akari
 - `~/config/settings/Akari/settings` is created on quit.
 - App icon (lit lantern) appears in the Deskbar team list and the replicant shows in the tray.
 
-### Known issues / limitations (M0)
+### What to test on Haiku (M1 acceptance)
+
+- Launch Akari, drag the warmth slider to max (3000 K): the screen should visibly turn amber.
+- Drag back to 6500 K: the tint should disappear completely (overlay hides at alpha 0).
+- Change warmth, quit the app, relaunch: the slider position and enabled state are restored
+  (`~/config/settings/Akari/settings`).
+- Close the window (not quit): settings persist; reopening via the Deskbar replicant or
+  relaunch restores the window frame.
+
+### Known issues / limitations (M0/M1)
 
 - Gamma-ramp path is probed but currently always reports unsupported on Haiku (public BScreen
   has no gamma setter); the overlay is the only working tint method for now. Status line says so.

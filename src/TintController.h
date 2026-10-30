@@ -23,6 +23,7 @@ public:
 						~TintController();
 
 	void				Init();
+	void				LoadSettings(const AppSettings& settings);
 	void				SetWarmth(int32_t slider);
 	void				SetEnabled(bool enabled);
 	void				SetSchedule(const Schedule& schedule);
@@ -48,7 +49,6 @@ private:
 	AppSettings			fSettings;
 	bool				fActive;
 	TintMethod			fMethod;
-	BMessenger			fNotifyTarget;
 };
 
 }
